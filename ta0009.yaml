@@ -1,0 +1,39 @@
+apiVersion: config.stackrox.io/v1alpha1
+kind: SecurityPolicy
+metadata:
+  name: ta0009
+spec:
+  policyName: TA0009
+  categories:
+    - Network Tools
+  lifecycleStages:
+    - RUNTIME
+  eventSource: DEPLOYMENT_EVENT
+  severity: HIGH_SEVERITY
+  notifiers:
+    - slack
+  policySections:
+    - sectionName: Rule 1
+      policyGroups:
+        - fieldName: Process Name
+          booleanOperator: OR
+          values:
+            - value: apt-get
+        - fieldName: Process Arguments
+          booleanOperator: OR
+          values:
+            - value: install libpcap-dev
+    - sectionName: Rule 2
+      policyGroups:
+        - fieldName: Process Name
+          booleanOperator: OR
+          values:
+            - value: tcpdump
+  mitreAttackVectors:
+    - tactic: TA0009
+      techniques:
+        - T1557
+  criteriaLocked: false
+  mitreVectorsLocked: false
+  isDefault: false
+
